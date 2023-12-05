@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SmallEnemy : MonoBehaviour, IDamageable
+public class SmallEnemy : Enemy, IDamageable
 {
     private const float DISTANCE_LIMIT = 0.8f;
 
@@ -19,7 +19,7 @@ public class SmallEnemy : MonoBehaviour, IDamageable
     void Start()
     {
         followPlayerSpeed = 2;
-        _health = 5;    //!temporario!!
+        _health = 20;    //!temporario!!
         playerPosition = GameManager.Instance.PlayerPosition;
         if (playerPosition == null)
         {

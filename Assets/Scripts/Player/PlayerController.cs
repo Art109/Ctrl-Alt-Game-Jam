@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     Vector2 input;
 
     [SerializeField] int speed;
+    [SerializeField] GameObject weapon;
+    IWeapon weaponScript;
 
     // variaveis de controle
     private bool isMoving;
@@ -20,6 +22,7 @@ public class PlayerController : MonoBehaviour
         speed = 5;  // initial value
         isMoving = false;
         animationController = GetComponent<PlayerAnimationController>();
+        weaponScript = weapon.GetComponent<IWeapon>();
     }
 
     // Update is called once per frame
@@ -39,6 +42,13 @@ public class PlayerController : MonoBehaviour
             animationController.SetMovingAnimation(false);
             isMoving = false;
         }
+
+        if(weapon != null )
+        {
+            weaponScript.AutoAttack();
+        }
+
+        
     }
 
     void FixedUpdate()
