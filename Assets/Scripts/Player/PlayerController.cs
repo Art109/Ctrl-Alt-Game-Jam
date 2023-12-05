@@ -1,52 +1,58 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private PlayerAnimationController animationController;
+
     Vector2 input;
-    Animator animator;
+
     [SerializeField] int speed;
+
+    // variaveis de controle
+    private bool isMoving;
+
+
     void Start()
     {
-        animator= GetComponent<Animator>();
+        speed = 5;  // initial value
+        isMoving = false;
+        animationController = GetComponent<PlayerAnimationController>();
     }
 
     // Update is called once per frame
     void Update()
     {
     
-            input.x = Input.GetAxisRaw("Horizontal");
-            input.y = Input.GetAxisRaw("Vertical");
+        input.x = Input.GetAxisRaw("Horizontal");
+        input.y = Input.GetAxisRaw("Vertical");
 
-            if (input != Vector2.zero)
-            {
-                animator.SetBool("isMoving", true);
-                Debug.Log(input.x);
-                animator.SetFloat("x", input.x);
-                Move(input);
-            }
-            else
-            {
-                animator.SetBool("isMoving", false);
-            }
-        
-        
+        if (input != Vector2.zero)
+        {
+            animationController.SetMovingAnimation(true);
+            isMoving = true;
+        }
+        else
+        {
+            animationController.SetMovingAnimation(false);
+            isMoving = false;
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (isMoving)
+            Move(); 
 
     }
 
-    void Move(Vector2 input)
+    private void Move()
     {
-        
-
-
         input = input.normalized;
-        input = input * speed * Time.deltaTime;
+        input = input * speed * Time.fixedDeltaTime;
 
-        transform.position += new Vector3(input.x,input.y,0);
-
-       
-
-        
+        transform.position += new Vector3(input.x, input.y, 0); 
     }
 }
