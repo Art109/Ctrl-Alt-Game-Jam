@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Weapon", menuName = "Weapon/Create new weapon")]
+[CreateAssetMenu(fileName = "Weapon", menuName = "Player/Weapon/Create new weapon")]
 public class WeaponBase : ScriptableObject
 {
     [SerializeField] float attackRange;

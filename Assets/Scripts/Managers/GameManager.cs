@@ -6,10 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    #region Singleton
+
     private static GameManager instance;
     public static GameManager Instance { get { return instance; } }
-
 
     private void Awake() {
         if (instance != null && instance != this)
@@ -18,9 +17,9 @@ public class GameManager : MonoBehaviour
         } else {
             instance = this;
         }
-
+        ResetGame(); // reiniciar parametros
     }
-    #endregion
+
     private const int SCENE_MENU = 0; //cena principal - menu
     private const int SCENE_GAME = 1; //cena de jogo
 
@@ -29,6 +28,9 @@ public class GameManager : MonoBehaviour
 
     [Header("ATRIBUTOS CENA DE JOGO")]
     private Transform playerPosition; public Transform PlayerPosition { get => playerPosition;}
+
+    [Header("SCRIPITABLE OBJECTS")]
+    [SerializeField] PlayerData playerData;
 
     void OnEnable()
     {
@@ -56,5 +58,9 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetActiveScene().buildIndex == SCENE_MENU){
             btnPlayGame.onClick.RemoveAllListeners();
         }
+    }
+
+    private void ResetGame(){
+        playerData.SetToInitialState();
     }
 }

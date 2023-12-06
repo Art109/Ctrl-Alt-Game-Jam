@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnPlayGame: {fileID: 0}
+  playerData: {fileID: 11400000, guid: 1ea7c762f7b64f240ad55ea69c902aa4, type: 2}

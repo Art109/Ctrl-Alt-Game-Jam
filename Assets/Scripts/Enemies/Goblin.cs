@@ -3,31 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SmallEnemy : Enemy, IDamageable
+public class Goblin : Enemy, IDamageable
 {
     private const float DISTANCE_LIMIT = 0.8f;
-
-    [SerializeField]private int _health;
+    [SerializeField] BaseEnemy baseEnemy;
 
     Transform playerPosition;
 
     private Vector3 _direction;
-    [SerializeField]float followPlayerSpeed;
 
     [SerializeField] Slider sldHealthBar;
     
     void Start()
     {
-        followPlayerSpeed = 2;
-        _health = 20;    //!temporario!!
-        playerPosition = GameManager.Instance.PlayerPosition;
-        if (playerPosition == null)
-        {
-            Debug.LogError("Player reference not found.");
-        }
-        sldHealthBar.maxValue = _health;
-    }
+        base.Health = baseEnemy.Health;
+        base.AttackDamage = baseEnemy.AttackDamage;    
+        base.Speed = baseEnemy.Speed;
 
+        playerPosition = GameManager.Instance.PlayerPosition;
+
+        if (playerPosition == null)
+            Debug.LogError("Player reference not found.");
+            
+        sldHealthBar.maxValue = Health;
+    }
 
     void FixedUpdate()
     {
@@ -38,21 +37,30 @@ public class SmallEnemy : Enemy, IDamageable
         
     }
 
-    void Movement(){
+
+    protected override void Attack(){
+        base.Attack();
+    }
+
+    protected override void Movement(){
+        base.Movement();
+
         _direction = (playerPosition.position - transform.position).normalized;
 
         float distance = Vector3.Distance(playerPosition.position, transform.position);
 
         if(distance > DISTANCE_LIMIT)
-            transform.position += _direction * followPlayerSpeed * Time.fixedDeltaTime;
+            transform.position += _direction * base.Speed * Time.fixedDeltaTime;
+        else
+            Attack();
     }
 
     void IDamageable.TakeDamage(int damageAmount)
     {
         Debug.Log(gameObject.name + " recebeu " + damageAmount.ToString() + " de dano!");
-        _health -= damageAmount;
+        Health -= damageAmount;
         UpdadeSliderHealthBar();
-        if (_health <= 0)
+        if (Health <= 0)
         {
             ((IDamageable)this).Death();
         }
@@ -60,12 +68,13 @@ public class SmallEnemy : Enemy, IDamageable
 
     void IDamageable.Death()
     {
+        Debug.Log("Inimigo "+this.gameObject.name + " morreu!");
         Destroy(gameObject);
     }
 
     void UpdadeSliderHealthBar(){
-        sldHealthBar.value = (_health >= 0) //IF ternário
-        ? _health   //condição verdadeira   
+        sldHealthBar.value = (Health >= 0) //IF ternário
+        ? Health   //condição verdadeira   
         : 0;        //condição falsa
     }
 }
